@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalogue>
+
+  <!-- ── RAW tests ──────────────────────────────────────────────────────── -->
+  <!-- BLOOD sample tests -->
+  <test id="total_cholesterol" name="Total Cholesterol"
+        type="RAW" sample_type="BLOOD" collection_cost="3"/>
+  <test id="hdl_cholesterol" name="HDL Cholesterol"
+        type="RAW" sample_type="BLOOD" collection_cost="3"/>
+  <test id="blood_glucose" name="Blood Glucose"
+        type="RAW" sample_type="BLOOD" collection_cost="2"/>
+  <test id="creatinine" name="Creatinine"
+        type="RAW" sample_type="BLOOD" collection_cost="4"/>
+  <test id="liver_enzyme" name="Liver Enzyme (ALT)"
+        type="RAW" sample_type="BLOOD" collection_cost="5"/>
+
+  <!-- URINE sample tests -->
+  <test id="urine_protein" name="Urine Protein"
+        type="RAW" sample_type="URINE" collection_cost="3"/>
+
+  <!-- TISSUE sample tests -->
+  <test id="biopsy_score" name="Liver Biopsy Score"
+        type="RAW" sample_type="TISSUE" collection_cost="6"/>
+
+  <!-- NONE (non-invasive) tests -->
+  <test id="bmi" name="Body Mass Index"
+        type="RAW" sample_type="NONE" collection_cost="1"/>
+
+  <!-- ── DERIVED tests (RAW inputs only) ───────────────────────────────── -->
+  <test id="cholesterol_ratio" name="Cholesterol Ratio" type="DERIVED">
+    <input ref="total_cholesterol"/>
+    <input ref="hdl_cholesterol"/>
+  </test>
+  <test id="glucose_indicator" name="Glucose Indicator" type="DERIVED">
+    <input ref="blood_glucose"/>
+  </test>
+  <!-- kidney_stress is shared by diabetes_risk and liver_health -->
+  <test id="kidney_stress" name="Kidney Stress Index" type="DERIVED">
+    <input ref="creatinine"/>
+    <input ref="urine_protein"/>
+  </test>
+  <test id="liver_function" name="Liver Function Score" type="DERIVED">
+    <input ref="liver_enzyme"/>
+    <input ref="biopsy_score"/>
+  </test>
+  <test id="bmi_indicator" name="BMI Indicator" type="DERIVED">
+    <input ref="bmi"/>
+  </test>
+
+  <!-- ── COMPOSITE tests (DERIVED/COMPOSITE inputs only) ───────────────── -->
+  <test id="cardiovascular_risk" name="Cardiovascular Risk Score" type="COMPOSITE">
+    <input ref="cholesterol_ratio"/>
+    <input ref="bmi_indicator"/>
+  </test>
+  <!-- diabetes_risk and liver_health both depend on kidney_stress (shared) -->
+  <test id="diabetes_risk" name="Diabetes Risk Score" type="COMPOSITE">
+    <input ref="glucose_indicator"/>
+    <input ref="kidney_stress"/>
+    <input ref="bmi_indicator"/>
+  </test>
+  <test id="liver_health" name="Liver Health Score" type="COMPOSITE">
+    <input ref="liver_function"/>
+    <input ref="kidney_stress"/>
+  </test>
+  <!-- overall_health depends on all three composite scores -->
+  <test id="overall_health" name="Overall Health Index" type="COMPOSITE">
+    <input ref="cardiovascular_risk"/>
+    <input ref="diabetes_risk"/>
+    <input ref="liver_health"/>
+  </test>
+
+</catalogue>

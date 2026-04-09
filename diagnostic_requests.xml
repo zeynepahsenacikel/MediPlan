@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<requests>
+  <single_target ref="overall_health"/>
+  
+  <all_targets>
+    <target ref="overall_health"/>
+    <target ref="cardiovascular_risk"/>
+    <target ref="diabetes_risk"/>
+    <target ref="liver_health"/>
+  </all_targets>
+</requests>
